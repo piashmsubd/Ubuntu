@@ -16,6 +16,7 @@ jobs:
           sudo systemctl enable ssh
           sudo systemctl start ssh
           hostname -I
+
           whoami
           sudo ufw allow ssh
           ssh-keygen -t rsa -b 4096 -C "gooogleabal@gmail.com" -f ~/.ssh/id_rsa -N ""
