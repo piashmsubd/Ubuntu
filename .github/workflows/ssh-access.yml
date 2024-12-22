@@ -16,6 +16,7 @@ jobs:
           sudo systemctl enable ssh
           sudo systemctl start ssh
           hostname -I
+          ping 172.17.0.1
 
           whoami
           sudo ufw allow ssh
