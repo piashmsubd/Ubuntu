@@ -1,10 +1,11 @@
-name: Edk2-build
+name: EDK2 Build and Release
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,6 +33,12 @@ jobs:
         make -C BaseTools
         . edksetup.sh
         build -a X64 -t GCC5 -p MdeModulePkg/MdeModulePkg.dsc
+      env:
+        BUILD_OUTPUT_DIR: ./Build
+
+    - name: Check Build Folder
+      run: |
+        ls ./Build
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
@@ -58,4 +65,4 @@ jobs:
       with:
         files: ./Build/**/*
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
