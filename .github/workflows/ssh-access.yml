@@ -32,7 +32,9 @@ jobs:
         git submodule update --init
         make -C BaseTools
         . edksetup.sh
-        build -a X64 -t GCC5 -p MdeModulePkg/MdeModulePkg.dsc -D BUILD_OUTPUT_DIR=./Build
+        build -a X64 -t GCC5 -p MdeModulePkg/MdeModulePkg.dsc
+      env:
+        BUILD_OUTPUT_DIR: ./Build
 
     - name: Check Build Folder
       run: |
