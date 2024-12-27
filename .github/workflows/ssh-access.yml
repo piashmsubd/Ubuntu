@@ -22,12 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential uuid-dev nasm gcc-10 g++-10
-
-    - name: Install iasl
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y iasl
+        sudo apt-get install -y build-essential uuid-dev nasm gcc-10 g++-10 iasl
 
     - name: Build EDK2
       run: |
@@ -38,6 +33,10 @@ jobs:
         make -C BaseTools
         . edksetup.sh
         build -a X64 -t GCC5 -p MdeModulePkg/MdeModulePkg.dsc
+
+    - name: Check Build Folder
+      run: |
+        ls ./Build
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
