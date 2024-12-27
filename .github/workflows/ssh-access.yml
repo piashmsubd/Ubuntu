@@ -1,10 +1,9 @@
-name: EDK2 Build
+name: Create Release
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    tags:
+      - 'v*.*.*'  # শুধুমাত্র ট্যাগ করা কমিটে রিলিজ তৈরি হবে
 
 jobs:
   build:
@@ -34,12 +33,29 @@ jobs:
         . edksetup.sh
         build -a X64 -t GCC5 -p MdeModulePkg/MdeModulePkg.dsc
 
-    - name: Check Build Folder
-      run: |
-        ls ./Build
-
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: edk2-build
         path: ./Build
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: edk2-build
+        path: ./Build
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./Build/**/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB }}
