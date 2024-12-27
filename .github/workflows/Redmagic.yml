@@ -50,4 +50,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: edk2-redmagic-6s-pro
-          path: ./Build￼Enter
+          path: ./Build
