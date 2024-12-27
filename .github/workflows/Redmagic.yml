@@ -1,0 +1,53 @@
+name: EDK2 Build for Redmagic-6S-Pro
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build EDK2 for Redmagic-6S-Pro
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install required packages
+        run: |
+          sudo dpkg --add-architecture i386
+          wget -qO - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+          sudo add-apt-repository ppa:cybermax-dexter/sdl2-backport
+          sudo apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu $(lsb_release -cs) main"
+          sudo apt-get update
+          sudo apt-get -y install build-essential uuid-dev clang llvm iasl nasm gcc-aarch64-linux-gnu abootimg python3-distutils python3-pil python3-git gettext libgcc-s1:i386 libstdc++6:i386
+          sudo apt-get install --install-recommends winehq-stable
+
+      - name: Clone device tree
+        run: |
+          git clone https://github.com/piashmsubd/REDMAGIC_6S_PRO.git device/nubia/nx669j
+
+      - name: Setup EDK2
+        run: |
+          git clone https://github.com/tianocore/edk2.git
+          cd edk2
+          git submodule update --init
+          make -C BaseTools
+          . edksetup.sh
+
+      - name: Build EDK2 for Redmagic-6S-Pro
+        run: |
+          build -a X64 -t GCC5 -p MdeModulePkg/MdeModulePkg.dsc -D BUILD_OUTPUT_DIR=./Build
+
+      - name: Check Build Folder
+        run: |
+          mkdir -p ./Build
+          ls ./Build
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: edk2-redmagic-6s-pro
+          path: ./Build￼Enter
