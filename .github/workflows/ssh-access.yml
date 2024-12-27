@@ -1,10 +1,10 @@
-name: Create Release
+name: Edk2-build
 
 on:
   push:
-    tags:
-      - 'v*.*.*'  # শুধুমাত্র ট্যাগ করা কমিটে রিলিজ তৈরি হবে
-
+    branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
