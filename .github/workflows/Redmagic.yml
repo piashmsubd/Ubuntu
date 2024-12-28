@@ -29,7 +29,10 @@ jobs:
           git clone https://github.com/tianocore/edk2.git
           cd edk2
           git submodule update --init
-          make -C BaseTools
+          cd BaseTools
+          make clean
+          make
+          cd ../..
           export PATH=$PATH:$(pwd)/BaseTools/BinWrappers/PosixLike
           . edksetup.sh
           export PACKAGES_PATH=$PACKAGES_PATH:$(pwd)/../device/nubia/nx669j
