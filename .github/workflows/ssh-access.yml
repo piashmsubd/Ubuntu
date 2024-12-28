@@ -30,6 +30,7 @@ jobs:
           cd edk2
           git submodule update --init
           make -C BaseTools
+          export PATH=$PATH:$(pwd)/BaseTools/BinWrappers/PosixLike
           . edksetup.sh
           export PACKAGES_PATH=$PACKAGES_PATH:$(pwd)/../device/nubia/nx669j
 
