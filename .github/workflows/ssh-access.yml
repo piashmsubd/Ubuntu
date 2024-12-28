@@ -29,14 +29,17 @@ jobs:
           git clone https://github.com/tianocore/edk2.git
           cd edk2
           git submodule update --init
-          make -C BaseTools
-          export PATH=$PATH:$(pwd)/BaseTools/BinWrappers/PosixLike
-          . edksetup.sh
-          export PACKAGES_PATH=$PACKAGES_PATH:$(pwd)/../device/nubia/nx669j
+          cd BaseTools
+          make clean
+          make
+          cd ../..
+          export PATH=$PATH:$(pwd)/edk2/BaseTools/BinWrappers/PosixLike
+          . edk2/edksetup.sh
+          export PACKAGES_PATH=$PACKAGES_PATH:$(pwd)/device/nubia/nx669j
 
       - name: Build EDK2 for Redmagic-6S-Pro
         run: |
-          build -a X64 -t GCC5 -p MdeModulePkg/MdeModulePkg.dsc -D BUILD_OUTPUT_DIR=./Build
+          build -a X64 -t GCC5 -p edk2/MdeModulePkg/MdeModulePkg.dsc -D BUILD_OUTPUT_DIR=./Build
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
