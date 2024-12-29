@@ -1,4 +1,4 @@
-name: Clean and Build EDK2 for Redmagic-6S-Pro
+name: Clean and Build EDK2 for Redmagic-6S-Pro 
 
 on:
   push:
