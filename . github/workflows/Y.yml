@@ -1,0 +1,45 @@
+name: Build Android Kernel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 8
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libncurses5-dev bison flex libssl-dev bc
+
+    - name: Configure kernel
+      run: |
+        cd android_kernel_nubia_sm8350
+        make menuconfig
+
+    - name: Build kernel
+      run: |
+        cd android_kernel_nubia_sm8350
+        make -j$(nproc) ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+
+    - name: Create boot image
+      run: |
+        cd android_kernel_nubia_sm8350
+        make bootimg
+
+    - name: Upload boot image
+      uses: actions/upload-artifact@v2
+      with:
+        name: boot-image
+        path: android_kernel_nubia_sm8350/path/to/your/boot.img￼Enter
